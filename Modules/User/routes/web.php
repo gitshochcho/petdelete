@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
+use Modules\User\Http\Controllers\Api\PetController;
 use Modules\User\Http\Controllers\UserController;
 
 /*
@@ -14,6 +16,10 @@ use Modules\User\Http\Controllers\UserController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('user', UserController::class)->names('user');
+Route::prefix('user')->middleware(['auth'])->group(function () {
+    Route::resource('/', UserController::class)->names('user');
+    Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::post('profile/update', [UserController::class, 'profileUpdate'])->name('user.profile.update');
+    Route::resource('pets', PetController::class)->names('user.pets');
+    Route::get('appointments', [UserController::class, 'userAppointments'])->name('user.appointments.index');
 });

@@ -49,7 +49,7 @@
                     </li>
                      <!--end::Menu Body--> <!--begin::Menu Footer-->
                     @auth('web')
-                        <li class="user-footer"> <a href="#" class="btn btn-default btn-flat">Profile</a> <a href="{{route('user.logout')}}" class="btn btn-default btn-flat float-end">Sign out</a> </li> <!--end::Menu Footer-->
+                        <li class="user-footer"> <a href="{{ route('user.profile') }}" class="btn btn-default btn-flat">Profile</a> <a href="{{route('user.logout')}}" class="btn btn-default btn-flat float-end">Sign out</a> </li> <!--end::Menu Footer-->
 
                     @endauth
 
