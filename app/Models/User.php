@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, Notifiable,HasApiTokens,InteractsWithMedia, HasRoles;
+    use HasFactory, Notifiable, HasApiTokens, InteractsWithMedia, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -56,5 +56,4 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(UserDetail::class);
     }
-
 }
