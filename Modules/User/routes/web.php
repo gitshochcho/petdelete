@@ -22,4 +22,5 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::post('profile/update', [UserController::class, 'profileUpdate'])->name('user.profile.update');
     Route::resource('pets', PetController::class)->names('user.pets');
     Route::get('appointments', [UserController::class, 'userAppointments'])->name('user.appointments.index');
+    Route::get('appointments/{appointment}', [UserController::class, 'showAppointment'])->name('user.appointments.show');
 });

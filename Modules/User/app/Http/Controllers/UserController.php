@@ -3,6 +3,7 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\UserDetail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -131,8 +132,26 @@ class UserController extends Controller
         }
 
         // Fetch user appointments
-        $appointments = $user->appointments()->with('pet')->get();
-        dd($appointments);
+        $query = Appointment::with(['pet', 'admin', 'user'])->where('user_id', $user->id);
+        $appointments = $query->orderBy('datetime', 'asc')->paginate(20);
+        // dd($appointments);
         return view('user::appointments.index', compact('appointments'));
+    }
+    public function showAppointment($id)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Fetch the appointment details
+        $appointment = Appointment::with(['pet', 'admin', 'user'])->findOrFail($id);
+
+        // Check if the appointment belongs to the authenticated user
+        if ($appointment->user_id !== $user->id) {
+            return redirect()->route('user.appointments.index')->with('error', 'Unauthorized access to this appointment.');
+        }
+
+        return view('user::appointments.show', compact('appointment'));
     }
 }
