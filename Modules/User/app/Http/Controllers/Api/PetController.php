@@ -21,7 +21,6 @@ class PetController extends Controller
 
         $pets = Pet::with(['user', 'petCategory', 'petSubcategory', 'petBreed'])->latest()->paginate(10);
 
-
         return view('user::pets.index', compact('pets'));
     }
 
