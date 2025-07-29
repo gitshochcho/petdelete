@@ -38,8 +38,8 @@ class ProfileController extends Controller
             'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'degree' => ['nullable', 'string', 'max:255'],
             'bvc_reg_number' => ['nullable', 'string', 'max:100'],
-            'home_visit' => ['nullable', 'boolean'],
-            'chamber_visit' => ['nullable', 'boolean'],
+            'home_visit' => ['nullable'],
+            'chamber_visit' => ['nullable'],
         ]);
 
         // Update user basic information
@@ -68,12 +68,14 @@ class ProfileController extends Controller
 
         // Add doctor-specific fields if user is a doctor
         if (method_exists($admin, 'hasRole') && $admin->hasRole('doctor')) {
-            $admin = array_merge($userDetailData, [
+            $admin->update([
                 'degree' => $request->degree,
                 'bvc_reg_number' => $request->bvc_reg_number,
                 'home_visit' => $request->home_visit,
                 'chamber_visit' => $request->chamber_visit,
             ]);
+
+
         }
 
 

@@ -37,4 +37,9 @@ Route::group(['middleware' => ['auth:admin']], function () {
 
     // Service management routes
     Route::resource('services', ServiceController::class)->names('admin.services');
+
+    // Appointment management routes
+    Route::post('appointments/update-status', [AdminController::class, 'updateAppointmentStatus'])->name('admin.appointments.updateStatus');
+    Route::delete('appointments/delete', [AdminController::class, 'deleteAppointment'])->name('admin.appointments.delete');
+    Route::get('appointments/{id}/details', [AdminController::class, 'getAppointmentDetails'])->name('admin.appointments.details');
 });

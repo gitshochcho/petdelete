@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 29, 2025 at 06:39 AM
+-- Generation Time: Jul 29, 2025 at 10:42 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.6
 
@@ -52,7 +52,9 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `name`, `email`, `phone`, `status`, `bvc_reg_number`, `chamber_visit`, `home_visit`, `degree`, `full_address`, `email_verified_at`, `mobile_verified_at`, `otp`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Super Admin', 'admin@gmail.com', '01740303508', 1, NULL, NULL, NULL, NULL, 'aswefv ssd sfds s', '2024-12-31 20:16:04', '2024-12-31 20:16:04', '522189', '$2y$12$iMnM1aMcTHHaKFdCjjXJGuPQeBBYEq1NKAAOm7a8F1D4OZCru6gZ2', NULL, NULL, '2025-07-28 23:59:44');
+(1, 'Super Admin', 'admin@gmail.com', '01740303508', 1, NULL, NULL, NULL, NULL, 'aswefv ssd sfds s', '2024-12-31 20:16:04', '2024-12-31 20:16:04', '522189', '$2y$12$iMnM1aMcTHHaKFdCjjXJGuPQeBBYEq1NKAAOm7a8F1D4OZCru6gZ2', NULL, NULL, '2025-07-28 23:59:44'),
+(2, 'Imani Love', 'doc@doc.com', '01678787567', 1, '532', 5000, '1000', 'Mbbs, fcps', 'werewe', NULL, NULL, NULL, '$2y$12$2yLF1P7nh3.IYepU/VeXluFChw8d5BM2QHMZ4T92bfQxl6y9k4eqK', NULL, '2025-07-29 01:13:57', '2025-07-29 01:47:40'),
+(3, 'Shannon Harper', 'doc1@doc.com', '01567698609', 0, '679', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$12$TwsBwubTVF/hp0fpxl0hC.2YB5eMXePpYWWh2LDysdS/c0BSJAQnO', NULL, '2025-07-29 01:15:13', '2025-07-29 01:15:13');
 
 -- --------------------------------------------------------
 
@@ -73,6 +75,15 @@ CREATE TABLE `appointments` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `appointments`
+--
+
+INSERT INTO `appointments` (`id`, `user_id`, `admin_id`, `pet_id`, `datetime`, `type`, `amount`, `status`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 1, '2025-09-21 00:00:00', 1, '5000.00', 0, 'this is test', '2025-07-29 03:34:27', '2025-07-29 03:34:27'),
+(2, 1, 2, 1, '2025-09-22 00:00:00', 1, '5000.00', 0, 'this is test', '2025-07-29 03:35:15', '2025-07-29 03:35:15'),
+(4, 1, 2, 1, '2025-09-24 00:00:00', 1, '5000.00', 0, 'this is test', '2025-07-29 03:35:22', '2025-07-29 04:21:31');
 
 -- --------------------------------------------------------
 
@@ -547,7 +558,8 @@ CREATE TABLE `media` (
 --
 
 INSERT INTO `media` (`id`, `model_type`, `model_id`, `uuid`, `collection_name`, `name`, `file_name`, `mime_type`, `disk`, `conversions_disk`, `size`, `manipulations`, `custom_properties`, `generated_conversions`, `responsive_images`, `order_column`, `created_at`, `updated_at`) VALUES
-(1, 'App\\Models\\Admin', 1, '9e7191e3-20b0-4ece-9f9c-209751afd805', 'profile', 'unpaid', 'unpaid.png', 'image/png', 'public', 'public', 317299, '[]', '[]', '[]', '[]', 1, '2025-07-28 23:59:46', '2025-07-28 23:59:46');
+(1, 'App\\Models\\Admin', 1, '9e7191e3-20b0-4ece-9f9c-209751afd805', 'profile', 'unpaid', 'unpaid.png', 'image/png', 'public', 'public', 317299, '[]', '[]', '[]', '[]', 1, '2025-07-28 23:59:46', '2025-07-28 23:59:46'),
+(2, 'App\\Models\\Admin', 2, '64bf0e7c-cdd4-4c5f-ba39-8f807f2a0992', 'profile', 'paid', 'paid.png', 'image/png', 'public', 'public', 636623, '[]', '[]', '[]', '[]', 1, '2025-07-29 01:17:02', '2025-07-29 01:17:02');
 
 -- --------------------------------------------------------
 
@@ -621,7 +633,9 @@ CREATE TABLE `model_has_roles` (
 --
 
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
-(1, 'App\\Models\\Admin', 1);
+(1, 'App\\Models\\Admin', 1),
+(2, 'App\\Models\\Admin', 2),
+(2, 'App\\Models\\Admin', 3);
 
 -- --------------------------------------------------------
 
@@ -984,8 +998,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('Cf7eSddLLjRyek4sQoN5WZIh81XDMK9SarrMcxsm', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibmFUSms0TkZ3eWJSaHFBSjc5dTNRRXF1c05YSzcyOEQ5Q1dYSjdJSiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MjoibG9naW5fYWRtaW5fNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM0OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvcHJvZmlsZS9lZGl0Ijt9fQ==', 1753769150),
-('JAsNNqzE2KM1AALqWJQs0KEPvYz9dNqZnfXN6d0e', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoid3hwYU9haENlUjZJUDl2OE9jN3VFVTVUWkhPSFZOYTg2dHVrV241YiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9yb2xlL3Blcm1pc3Npb24vcGVybWlzc2lvbi9pbmRleCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTI6ImxvZ2luX2FkbWluXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1753703470);
+('kjAKsO99vYZEWTDZuYRaeX6J2WObdHsJ8lgV0o0b', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiYlRHN2RscE9mbXQzUmZwY2NrSG5HdGN3dHk0bmZCd21rQ1kya2tIcSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9zZXJ2aWNlcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTI6ImxvZ2luX2FkbWluXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1753785639);
 
 -- --------------------------------------------------------
 
@@ -1300,13 +1313,13 @@ ALTER TABLE `user_details`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `countries`
@@ -1342,7 +1355,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `migrations`

@@ -462,17 +462,11 @@ class HomeController extends Controller
     public function createAppointment(Request $request)
     {
         try {
-            $user = Auth::user();
 
-            if (!$user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User not authenticated'
-                ], 401);
-            }
 
             $validator = Validator::make($request->all(), [
-                'admin_id' => 'required|exists:admins,id',
+                'doctor_id' => 'required|exists:admins,id',
+                'user_id' => 'required|exists:users,id',
                 'pet_id' => 'required|exists:pets,id',
                 'datetime' => 'required|date|after:now',
                 'type' => 'required|in:1,2',
@@ -490,7 +484,7 @@ class HomeController extends Controller
 
             // Check if pet belongs to user
             $pet = Pet::find($request->pet_id);
-            if ($pet->user_id !== $user->id) {
+            if ($pet->user_id != $request->user_id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Pet does not belong to this user'
@@ -498,8 +492,8 @@ class HomeController extends Controller
             }
 
             $appointment = Appointment::create([
-                'user_id' => $user->id,
-                'admin_id' => $request->admin_id,
+                'user_id' => $request->user_id,
+                'admin_id' => $request->doctor_id,
                 'pet_id' => $request->pet_id,
                 'datetime' => $request->datetime,
                 'type' => $request->type,
@@ -532,8 +526,13 @@ class HomeController extends Controller
     {
         try {
 
+            $query = Admin::role('doctor');
 
-            $doctors = Admin::role('doctor')->get()->map(function ($doctor) {
+            if ($request->has('doctor_id')) {
+                $query->where('id', $request->doctor_id);
+            }
+
+            $doctors = $query->where('status', 1)->get()->map(function ($doctor) {
                 $doctor->profile = $doctor->getFirstMediaUrl('avatar') ?: null;
                 return $doctor;
             });
@@ -557,8 +556,19 @@ class HomeController extends Controller
      */
     public function getUserPets(Request $request)
     {
+         $validator = Validator::make($request->all(), [
+            'user_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
         try {
-            $user = User::find($request->id);
+            $user = User::find($request->user_id);
 
             if (!$user) {
                 return response()->json([
@@ -567,9 +577,9 @@ class HomeController extends Controller
                 ], 401);
             }
 
-            $pets = Pet::where('user_id', $user->id)
+            $pets = Pet::where('user_id', $user->id)->with(['user', 'petCategory', 'petSubcategory', 'petBreed'])
                 ->where('status', 1)
-                ->get(['id', 'name', 'pet_category_id', 'pet_subcategory_id', 'pet_breed_id']);
+                ->get();
 
             return response()->json([
                 'success' => true,
@@ -583,5 +593,47 @@ class HomeController extends Controller
                 'message' => 'Error retrieving pets: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function getNormalUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email_or_mobile' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $emailOrMobile = $request->input('email_or_mobile');
+        $user = null;
+
+        if (filter_var($emailOrMobile, FILTER_VALIDATE_EMAIL)) {
+            $user = User::where('email', $emailOrMobile)->first();
+        } else {
+            $countryIso = Country::where('id', 18)->first();
+            $phoneNumber = validationMobileNumber($emailOrMobile, $countryIso->iso);
+            $user = User::where('phone', $phoneNumber)->first();
+
+        }
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+         if ($user) {
+                $user->profile = $user->getFirstMediaUrl('avatar') ?: null;
+            }
+        return response()->json([
+            'success' => true,
+            'data' => $user,
+            'message' => 'User found'
+        ]);
     }
 }

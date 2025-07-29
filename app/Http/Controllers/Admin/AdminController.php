@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\ForgetPassMail;
 use App\Models\Admin;
+use App\Models\Appointment;
 use App\Models\Country;
 use App\Models\Gender;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +29,14 @@ class AdminController extends Controller
         $datas = Country::all();
         $genders = Gender::all();
         return view('auth.admin.login',compact('datas','genders'));
+
+    }
+
+    public function adminRegistration()
+    {
+        $datas = Country::all();
+        $genders = Gender::all();
+        return view('auth.admin.register',compact('datas','genders'));
 
     }
 
@@ -271,5 +281,65 @@ class AdminController extends Controller
         return redirect()->route('adminLogin')->with($toster);
     }
 
+
+    public function adminDocRegistration(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins,email',
+            'phone' => 'required',
+            'password' => 'required|string|min:8|confirmed',
+            'bvc_reg_number' => 'required|numeric|unique:admins,bvc_reg_number',
+        ]);
+
+        if ($validator->fails()) {
+            $toster = array(
+                'message' => $validator->errors()->first(),
+                'alert-type' => 'error'
+            );
+            return redirect()->route('adminRegistration')->with($toster);
+        }
+
+            $countryID = $request->country_id ?? 18;
+            $countryIso = Country::where('id',$countryID)->first();
+            $phoneNumber = validationMobileNumber($request->phone,$countryIso->iso);
+        // Create the admin user
+        $admin = Admin::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $phoneNumber,
+            'password' => Hash::make($request->password),
+            'bvc_reg_number' => $request->bvc_reg_number,
+            'status' => 0,
+            'email_verified_at' => Carbon::now(),
+            'mobile_verified_at' => Carbon::now(),
+        ]);
+
+        $toster = array(
+            'message' => 'Doctor Registered Successfully',
+            'alert-type' => 'success'
+        );
+        $admin->assignRole('doctor');
+        return redirect()->route('adminLogin')->with($toster);
+    }
+
+
+    public function getAppointment(Request $request)
+    {
+        $user = Auth::guard('admin')->user();
+
+        if ($user->hasRole('SuperAdmin')) {
+            // Show all appointments
+            $query = Appointment::with(['pet', 'admin', 'user']);
+        } elseif ($user->hasRole('doctor')) {
+            // Show only appointments for this doctor
+            $query = Appointment::with(['pet', 'admin', 'user'])->where('admin_id', $user->id);
+        }
+
+        $data = $query->orderBy('datetime', 'asc')->paginate(20);
+
+
+        return view('admin::appoinment.index', compact('data'));
+    }
 
 }

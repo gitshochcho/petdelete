@@ -12,13 +12,12 @@ Route::get('/user', function (Request $request) {
 
 
     // Create new appointment
-    Route::post('/appointments', [HomeController::class, 'createAppointment']);
-
-
+    Route::post('appointment/store', [HomeController::class, 'createAppointment']);
 
     // Get available doctors
-    Route::get('/doctors', [HomeController::class, 'getAvailableDoctors']);
+    Route::get('doctors', [HomeController::class, 'getAvailableDoctors']);
 
     // Get user's pets
-    Route::get('/user/pets', [HomeController::class, 'getUserPets']);
+    Route::get('user/pets', [HomeController::class, 'getUserPets']);
+    Route::get('user/detail', [HomeController::class, 'getNormalUser']);
 

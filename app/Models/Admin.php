@@ -27,4 +27,9 @@ class Admin extends Authenticatable implements HasMedia
         'degree',
         'full_address',
     ];
+
+     protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

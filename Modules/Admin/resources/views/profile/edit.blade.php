@@ -114,7 +114,7 @@
                                         <label for="degree" class="form-label">Degree/Qualification</label>
                                         <input type="text" class="form-control @error('degree') is-invalid @enderror"
                                                id="degree" name="degree"
-                                               value="{{ old('degree', $admin->userDetail->degree ?? '') }}"
+                                               value="{{ old('degree', $admin->degree ?? '') }}"
                                                placeholder="e.g., MBBS, BVSc, PhD">
                                         @error('degree')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -127,7 +127,7 @@
                                         <label for="bvc_reg_number" class="form-label">BVC Registration Number</label>
                                         <input type="text" class="form-control @error('bvc_reg_number') is-invalid @enderror"
                                                id="bvc_reg_number" name="bvc_reg_number"
-                                               value="{{ old('bvc_reg_number', auth()->user()->userDetail->bvc_reg_number ?? '') }}"
+                                               value="{{ old('bvc_reg_number', $admin->bvc_reg_number ?? '') }}"
                                                placeholder="Enter BVC registration number">
                                         @error('bvc_reg_number')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -139,13 +139,11 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="home_visit" class="form-label">Home Visit Available</label>
-                                        <select class="form-select @error('home_visit') is-invalid @enderror"
-                                                id="home_visit" name="home_visit">
-                                            <option value="">Select Option</option>
-                                            <option value="1" {{ old('home_visit', auth()->user()->userDetail->home_visit ?? '') == '1' ? 'selected' : '' }}>Yes</option>
-                                            <option value="0" {{ old('home_visit', auth()->user()->userDetail->home_visit ?? '') == '0' ? 'selected' : '' }}>No</option>
-                                        </select>
+                                        <label for="home_visit" class="form-label">Home Visit Fee</label>
+                                        <input type="number" class="form-control @error('home_visit') is-invalid @enderror"
+                                               id="home_visit" name="home_visit"
+                                               value="{{ old('home_visit', $admin->home_visit ?? '') }}"
+                                               min="0" placeholder="Enter home visit fee">
                                         @error('home_visit')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -154,13 +152,11 @@
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="chamber_visit" class="form-label">Chamber Visit Available</label>
-                                        <select class="form-select @error('chamber_visit') is-invalid @enderror"
-                                                id="chamber_visit" name="chamber_visit">
-                                            <option value="">Select Option</option>
-                                            <option value="1" {{ old('chamber_visit', auth()->user()->userDetail->chamber_visit ?? '') == '1' ? 'selected' : '' }}>Yes</option>
-                                            <option value="0" {{ old('chamber_visit', auth()->user()->userDetail->chamber_visit ?? '') == '0' ? 'selected' : '' }}>No</option>
-                                        </select>
+                                        <label for="chamber_visit" class="form-label">Chamber Visit Fee</label>
+                                        <input type="number" class="form-control @error('chamber_visit') is-invalid @enderror"
+                                               id="chamber_visit" name="chamber_visit"
+                                               value="{{ old('chamber_visit', $admin->chamber_visit ?? '') }}"
+                                               min="0" placeholder="Enter chamber visit fee">
                                         @error('chamber_visit')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
