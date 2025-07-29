@@ -42,8 +42,7 @@ class HomeController extends Controller
     {
         $datas = Country::all();
         $genders = Gender::all();
-        return view('auth.login',compact('datas','genders'));
-
+        return view('auth.login', compact('datas', 'genders'));
     }
 
 
@@ -53,20 +52,20 @@ class HomeController extends Controller
     {
         $datas = Country::all();
         $genders = Gender::all();
-        return view('auth.register',compact('datas','genders'));
-
+        return view('auth.register', compact('datas', 'genders'));
     }
 
 
     public function validateLogin(Request $request)
     {
-        $countryIso = Country::where('id',18)->first();
+        $countryIso = Country::where('id', 18)->first();
 
-        $validated = $request->validate([
-            // 'email_or_phone' => ['bail','required','regex:/^[0-9+]+$/',(new Phone)->country([$countryIso->iso])],
-            'email_or_phone' => ['bail','required'],
+        $validated = $request->validate(
+            [
+                // 'email_or_phone' => ['bail','required','regex:/^[0-9+]+$/',(new Phone)->country([$countryIso->iso])],
+                'email_or_phone' => ['bail', 'required'],
 
-            'password' => 'required',
+                'password' => 'required',
             ],
             [
                 'email_or_phone.regex' => 'The phone number must contain only English digits (0-9).',
@@ -79,22 +78,19 @@ class HomeController extends Controller
 
         if (filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL)) {
             $user = User::where('email', $request->email_or_phone)
-            // ->orWhere('phone', $phoneNumber)
-            ->first();
-        }
-        else
-        {
-            $phoneNumber = validationMobileNumber($request->email_or_phone,$countryIso->iso);
+                // ->orWhere('phone', $phoneNumber)
+                ->first();
+        } else {
+            $phoneNumber = validationMobileNumber($request->email_or_phone, $countryIso->iso);
             $user = User::where('email', $request->email_or_phone)
-                    ->orWhere('phone', $phoneNumber)
-                    ->first();
+                ->orWhere('phone', $phoneNumber)
+                ->first();
         }
 
 
 
         if ($user) {
-            if (Hash::check($password, $user->password))
-            {
+            if (Hash::check($password, $user->password)) {
 
                 if (($user->status == 0)) {
 
@@ -103,8 +99,7 @@ class HomeController extends Controller
                         'message' => "This account is in black listed",
                         'alert-type' => 'error'
                     );
-                    return back()->with( $toster);
-
+                    return back()->with($toster);
                 } else {
 
                     if ($request->has('remember')) {
@@ -113,28 +108,22 @@ class HomeController extends Controller
                         Auth::guard('web')->login($user);
                     }
                     $toster = array(
-                        'message' => "Wlecome to Dashboard, ".$user->name,
+                        'message' => "Wlecome to Dashboard, " . $user->name,
                         'alert-type' => 'success'
                     );
 
-                    return redirect()->route('user.dashboard')->with( $toster);
+                    return redirect()->route('user.dashboard')->with($toster);
                 }
-
-            }
-
-            else
-            {
+            } else {
                 return back()->with('fail', 'Wrong Credential');
             }
-        }
-        else
-        {
+        } else {
             $toster = array(
                 'message' => "User Not Found",
                 'alert-type' => 'error'
             );
 
-            return back()->with( $toster);
+            return back()->with($toster);
         }
     }
 
@@ -144,23 +133,24 @@ class HomeController extends Controller
 
     public function storRegistration(Request $request)
     {
-        $code = rand(100000,999999);
+        $code = rand(100000, 999999);
         $countryID = $request->country_id ?? 18;
-        $countryIso = Country::where('id',$countryID)->first();
+        $countryIso = Country::where('id', $countryID)->first();
 
 
-        $validated = $request->validate([
-            'name' => 'required',
-            'email' => 'unique:users',
-            'password' => 'required|confirmed',
-            'password_confirmation' => 'required|same:password',
-            // 'education_type_id' => 'required',
-            'phone' => ['required','unique:users','regex:/^[0-9+]+$/',(new Phone)->country([$countryIso->iso]??['BD']),],
-            // 'upazila_id' => 'required',
-            // 'district_id' => 'required',
-            // 'division_id' => 'required',
-            'gender_id' => 'required',
-            // 'country_id' => 'required',
+        $validated = $request->validate(
+            [
+                'name' => 'required',
+                'email' => 'unique:users',
+                'password' => 'required|confirmed',
+                'password_confirmation' => 'required|same:password',
+                // 'education_type_id' => 'required',
+                'phone' => ['required', 'unique:users', 'regex:/^[0-9+]+$/', (new Phone)->country([$countryIso->iso] ?? ['BD']),],
+                // 'upazila_id' => 'required',
+                // 'district_id' => 'required',
+                // 'division_id' => 'required',
+                'gender_id' => 'required',
+                // 'country_id' => 'required',
             ],
             [
                 'phone.regex' => 'The phone number must contain only English digits (0-9).',
@@ -169,54 +159,52 @@ class HomeController extends Controller
         );
 
 
-        $phoneNumber = validationMobileNumber($request->phone,$countryIso->iso);
+        $phoneNumber = validationMobileNumber($request->phone, $countryIso->iso);
 
-            $user = DB::transaction(function () use($request,$code,$phoneNumber) {
-                $userCreate = array(
-                    "name" => $request->name,
-                    "email" => $request->email ?? null,
-                    "password" => Hash::make($request->password),
-                    "phone" => $phoneNumber,
-                    "otp" => $code,
-                    "status" => 1,
+        $user = DB::transaction(function () use ($request, $code, $phoneNumber) {
+            $userCreate = array(
+                "name" => $request->name,
+                "email" => $request->email ?? null,
+                "password" => Hash::make($request->password),
+                "phone" => $phoneNumber,
+                "otp" => $code,
+                "status" => 1,
 
-                );
+            );
 
-                $newuser = User::create($userCreate);
+            $newuser = User::create($userCreate);
 
-                $userdetail = array(
-                    "user_id" => $newuser->id,
-                    "division_id" => $request->division_id ?? null,
-                    "district_id" => $request->district_id ?? null ,
-                    "upazila_id" => $request->upazila_id ?? null ,
-                    "union_id" => $request->union_id ?? null ,
-                    "education_type_id" => $request->education_type_id ?? null ,
-                    "profession_id" => $request->profession_id ?? null ,
-                    "gender_id" => $request->gender_id ?? null ,
-                    "country_id" => $request->country_id ?? null ,
-                    "religion_id" => $request->religion_id ?? null ,
-                );
-                $userDetail = UserDetail::create($userdetail);
+            $userdetail = array(
+                "user_id" => $newuser->id,
+                "division_id" => $request->division_id ?? null,
+                "district_id" => $request->district_id ?? null,
+                "upazila_id" => $request->upazila_id ?? null,
+                "union_id" => $request->union_id ?? null,
+                "education_type_id" => $request->education_type_id ?? null,
+                "profession_id" => $request->profession_id ?? null,
+                "gender_id" => $request->gender_id ?? null,
+                "country_id" => $request->country_id ?? null,
+                "religion_id" => $request->religion_id ?? null,
+            );
+            $userDetail = UserDetail::create($userdetail);
 
-                return $newuser;
-            });
+            return $newuser;
+        });
 
-            if ($user->status == 1) {
-                $toster = array(
-                    'message' => "Registration Successfull",
-                    'alert-type' => 'success'
-                );
-                return redirect()->route('login')->with( $toster);
+        if ($user->status == 1) {
+            $toster = array(
+                'message' => "Registration Successfull",
+                'alert-type' => 'success'
+            );
+            return redirect()->route('login')->with($toster);
+        } else {
 
-            } else {
-
-                $toster = array(
-                    'message' => "Registration Fail",
-                    'alert-type' => 'error'
-                );
-                return redirect()->route('registration')->with( $toster);
-
-            }
+            $toster = array(
+                'message' => "Registration Fail",
+                'alert-type' => 'error'
+            );
+            return redirect()->route('registration')->with($toster);
+        }
     }
 
 
@@ -228,7 +216,7 @@ class HomeController extends Controller
     public function googleOauthCallBack()
     {
         $user = Socialite::driver('google')->user();
-        dd( $user);
+        dd($user);
     }
 
     public function logout(Request $request): RedirectResponse
@@ -245,16 +233,16 @@ class HomeController extends Controller
     public function loadForgetMyPass()
     {
         $datas = Country::all();
-        return view('auth.forgetpass',compact('datas'));
-
+        return view('auth.forgetpass', compact('datas'));
     }
 
     public function searchUser(Request $request)
     {
-        $countryIso = Country::where('id',18)->first();
+        $countryIso = Country::where('id', 18)->first();
 
-        $validated = $request->validate([
-            'email_or_phone' => ['bail','required'],
+        $validated = $request->validate(
+            [
+                'email_or_phone' => ['bail', 'required'],
             ],
             [
                 'email_or_phone.regex' => 'The phone number must contain only English digits (0-9).',
@@ -264,10 +252,8 @@ class HomeController extends Controller
 
         if (filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL)) {
             $credential = array("email" => $request->email_or_phone);
-        }
-        else
-        {
-            $phoneNumber = validationMobileNumber($request->email_or_phone,$countryIso->iso);
+        } else {
+            $phoneNumber = validationMobileNumber($request->email_or_phone, $countryIso->iso);
             $credential = array("phone" => $phoneNumber);
             $email = false;
         }
@@ -281,16 +267,13 @@ class HomeController extends Controller
             );
 
             return redirect()->route('userOtpLoad')->with('uuid', $user->id)->with($toster);
-
-        }
-        else
-        {
+        } else {
             $toster = array(
                 'message' => 'User Not Found',
                 'alert-type' => 'error'
             );
 
-            return back()->with( $toster);
+            return back()->with($toster);
         }
     }
 
@@ -307,7 +290,7 @@ class HomeController extends Controller
             ]);
         }
 
-        $randCode = rand(100000,999999);
+        $randCode = rand(100000, 999999);
         $toster = array(
             'message' => 'User Found',
             'alert-type' => 'success'
@@ -317,12 +300,9 @@ class HomeController extends Controller
         $messageContent = "Your Reset Code is : {$randCode}";
 
         // Email Code
-        if($user->email != null && $status == true)
-        {
-            Mail::to($user->email)->queue(new ForgetPassMail($name,$messageContent));
-        }
-        else
-        {
+        if ($user->email != null && $status == true) {
+            Mail::to($user->email)->queue(new ForgetPassMail($name, $messageContent));
+        } else {
             return back()->with([
                 'message' => 'Error in otp sending',
                 'alert-type' => 'error'
@@ -330,8 +310,6 @@ class HomeController extends Controller
         }
 
         return view('auth.userotp', compact('user'))->with($toster);
-
-
     }
 
 
@@ -351,7 +329,7 @@ class HomeController extends Controller
                 'message' => 'Wrong OTP',
                 'alert-type' => 'error'
             );
-            return redirect()->route('forgetMyPass')->with( $toster);
+            return redirect()->route('forgetMyPass')->with($toster);
         }
 
         $otp = preg_replace('/\D/', '', implode('', $request->input('otp')));
@@ -360,16 +338,13 @@ class HomeController extends Controller
         $user = User::find($request->uuid);
 
         // if ($admin->otp == $request->otp && $admin->otp_validate_time > now())
-        if ($user?->otp == $otp)
-        {
+        if ($user?->otp == $otp) {
             $toster = array(
                 'message' => 'Otp Matched',
                 'alert-type' => 'success'
             );
             return view('auth.passconfirm', compact('user'))->with($toster);
-        }
-        else
-        {
+        } else {
             $toster = array(
                 'message' => 'Wrong OTP',
                 'alert-type' => 'error'
@@ -386,23 +361,25 @@ class HomeController extends Controller
     public function updateUserPassword(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'password' => 'required',
-            'password_confirmation' => 'required|same:password',
-        ],
-        [
-            'password.required' => 'The Password is required',
-            'password_confirmation.required' => 'The Confirm Password is required',
-            'password_confirmation.same' => 'The Confirm Password and Password must match',
-        ]
-    );
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'password' => 'required',
+                'password_confirmation' => 'required|same:password',
+            ],
+            [
+                'password.required' => 'The Password is required',
+                'password_confirmation.required' => 'The Confirm Password is required',
+                'password_confirmation.same' => 'The Confirm Password and Password must match',
+            ]
+        );
 
         if ($validator->fails()) {
             $toster = array(
                 'message' => $validator->errors()->first(),
                 'alert-type' => 'error'
             );
-            return redirect()->route('login')->with( $toster);
+            return redirect()->route('login')->with($toster);
         }
 
 
@@ -447,7 +424,6 @@ class HomeController extends Controller
                 'data' => $appointments,
                 'message' => 'Appointments retrieved successfully'
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -469,7 +445,7 @@ class HomeController extends Controller
                 'user_id' => 'required|exists:users,id',
                 'pet_id' => 'required|exists:pets,id',
                 'datetime' => 'required|date|after:now',
-                'type' => 'required|in:1,2',
+                // 'type' => 'required|in:1,2',
                 'amount' => 'required|numeric|min:0',
                 'notes' => 'nullable|string|max:1000'
             ]);
@@ -496,7 +472,7 @@ class HomeController extends Controller
                 'admin_id' => $request->doctor_id,
                 'pet_id' => $request->pet_id,
                 'datetime' => $request->datetime,
-                'type' => $request->type,
+                'type' => 1,
                 'amount' => $request->amount,
                 'notes' => $request->notes,
                 'status' => 0 // Pending
@@ -509,7 +485,6 @@ class HomeController extends Controller
                 'data' => $appointment,
                 'message' => 'Appointment created successfully'
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -542,7 +517,6 @@ class HomeController extends Controller
                 'data' => $doctors,
                 'message' => 'Available doctors retrieved successfully'
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -556,7 +530,7 @@ class HomeController extends Controller
      */
     public function getUserPets(Request $request)
     {
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'user_id' => 'required'
         ]);
 
@@ -586,7 +560,6 @@ class HomeController extends Controller
                 'data' => $pets,
                 'message' => 'User pets retrieved successfully'
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -618,7 +591,6 @@ class HomeController extends Controller
             $countryIso = Country::where('id', 18)->first();
             $phoneNumber = validationMobileNumber($emailOrMobile, $countryIso->iso);
             $user = User::where('phone', $phoneNumber)->first();
-
         }
 
         if (!$user) {
@@ -627,9 +599,9 @@ class HomeController extends Controller
                 'message' => 'User not found'
             ], 404);
         }
-         if ($user) {
-                $user->profile = $user->getFirstMediaUrl('avatar') ?: null;
-            }
+        if ($user) {
+            $user->profile = $user->getFirstMediaUrl('avatar') ?: null;
+        }
         return response()->json([
             'success' => true,
             'data' => $user,
