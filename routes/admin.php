@@ -15,6 +15,8 @@ Route::prefix('admin')->group(function () {
                 Route::post('validate/login', 'adminValidateLogin')->name('adminValidateLogin');
                 Route::post('update/password', 'updatePassword')->name('updatePassword');
                 Route::post('validate/otp', 'validateOtp')->name('validateOtp');
+                Route::get('doc/registration', 'adminRegistration')->name('adminRegistration');
+                Route::post('store/doctor', 'adminDocRegistration')->name('adminDocRegistration');
 
 
         //     Route::post('update/{survey:uuid}', 'update');
@@ -30,6 +32,8 @@ Route::prefix('admin')->group(function () {
             Route::get('logout', 'logout')->name('admin.logout');
 
         });
+
+    Route::get('get/appointment', [AdminController::class, 'getAppointment'])->name('getAppointment');
 
     });
 
