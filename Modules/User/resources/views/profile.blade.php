@@ -8,11 +8,9 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Dashboard</h1>
+                <h1>Profile</h1>
                 <a href="{{ route('user.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
             </div>
-            {{ $user }}
-            <h2 class="mb-4">Profile Information</h2>}}
             <div class="card">
                 <div class="card-body">
                     <form action="{{ route('user.profile.update', ['user' => $user->id]) }}" method="POST">

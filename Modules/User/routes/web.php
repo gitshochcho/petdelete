@@ -16,10 +16,10 @@ use Modules\User\Http\Controllers\UserController;
 |
 */
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('user', UserController::class)->names('user');
-    Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
-    Route::post('user/profile/update', [UserController::class, 'profileUpdate'])->name('user.profile.update');
+Route::prefix('user')->middleware(['auth'])->group(function () {
+    Route::resource('/', UserController::class)->names('user');
+    Route::get('profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::post('profile/update', [UserController::class, 'profileUpdate'])->name('user.profile.update');
     Route::resource('pets', PetController::class)->names('user.pets');
     Route::get('appointments', [UserController::class, 'userAppointments'])->name('user.appointments.index');
 });
