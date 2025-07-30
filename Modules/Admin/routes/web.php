@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\AdminController;
+use Modules\Admin\Http\Controllers\DoctorController;
 use Modules\Admin\Http\Controllers\PetCategoryController;
 use Modules\Admin\Http\Controllers\PetSubcategoryController;
 use Modules\Admin\Http\Controllers\PetBreedController;
@@ -42,4 +43,6 @@ Route::group(['middleware' => ['auth:admin']], function () {
     Route::post('appointments/update-status', [AdminController::class, 'updateAppointmentStatus'])->name('admin.appointments.updateStatus');
     Route::delete('appointments/delete', [AdminController::class, 'deleteAppointment'])->name('admin.appointments.delete');
     Route::get('appointments/{id}/details', [AdminController::class, 'getAppointmentDetails'])->name('admin.appointments.details');
+
+    Route::get('doctors', [DoctorController::class, 'index'])->name('admin.doctors.index');
 });
