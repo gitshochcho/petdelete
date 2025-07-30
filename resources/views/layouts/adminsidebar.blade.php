@@ -88,6 +88,12 @@
                             Services
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('doctors/*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">
+                            <i class="fas fa-user-md me-2"></i>
+                            Veterinary Doctors
+                        </a>
+                    </li>
                 @elseif($user && $user->hasRole('doctor'))
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/get/appointment/*') ? 'active' : '' }}" href="{{ route('getAppointment') }}">
