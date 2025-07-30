@@ -499,7 +499,7 @@ class HomeController extends Controller
                 'type' => $request->type,
                 'amount' => $request->amount,
                 'notes' => $request->notes,
-                'status' => 0 // Pending
+                'status' => 1 // Pending
             ]);
 
 
