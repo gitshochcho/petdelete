@@ -3,9 +3,9 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>AdminLTE 4 | Login Page v2</title><!--begin::Primary Meta Tags-->
+    <title>PetBD | Login</title><!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="AdminLTE 4 | Login Page v2">
+    <meta name="title" content="PetBD | Login">
     <meta name="author" content="ColorlibHQ">
     <meta name="description" content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS.">
     <meta name="keywords" content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard"><!--end::Primary Meta Tags--><!--begin::Fonts-->
@@ -14,13 +14,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" integrity="sha256-Qsx5lrStHZyR9REqhUF8iQt73X06c8LGIUPzpOhwRrI=" crossorigin="anonymous"><!--end::Third Party Plugin(Bootstrap Icons)--><!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="{{asset('css/adminlte.css')}}"><!--end::Required Plugin(AdminLTE)-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head> <!--end::Head--> <!--begin::Body-->
 
 <body class="login-page bg-body-secondary">
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header"> <a href="../index2.html" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
-                    <h1 class="mb-0"> <b>Admin</b>LTE
+                    <h1 class="mb-0"> <b>PetBD</b> Login
                     </h1>
                 </a> </div>
             <div class="card-body login-card-body">
@@ -29,17 +31,14 @@
                     @csrf
                     <div class="input-group mb-1">
                         <div class="form-floating"> <input id="email_or_phone" type="text" name="email_or_phone" class="form-control" value="" placeholder=""> <label for="loginEmail">Email or Mobile</label> </div>
-                        <div class="input-group-text">
-                             <span class="bi bi-envelope"></span>
-                             <span class="bi bi-phone"></span>
-                         </div>
+
                     </div>
                     @error('email_or_phone')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                     <div class="input-group mb-1">
                         <div class="form-floating"> <input id="loginPassword" type="password" name="password" class="form-control" placeholder=""> <label for="loginPassword">Password</label> </div>
-                        <div class="input-group-text"> <span class="bi bi-lock-fill"></span> </div>
+                        {{-- <div class="input-group-text"> <i class="fas fa-eye"></i> </div> --}}
                     </div> <!--begin::Row-->
 
                     @error('password')

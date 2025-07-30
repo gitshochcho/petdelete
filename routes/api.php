@@ -11,13 +11,12 @@ Route::get('/user', function (Request $request) {
 // Appointment API Routes
 
 
-    // Create new appointment
-    Route::post('appointment/store', [HomeController::class, 'createAppointment']);
+// Create new appointment
+Route::post('appointment/store', [HomeController::class, 'createAppointment']);
 
-    // Get available doctors
-    Route::get('doctors', [HomeController::class, 'getAvailableDoctors']);
+// Get available doctors
+Route::get('doctors', [HomeController::class, 'getAvailableDoctors']);
 
-    // Get user's pets
-    Route::get('user/pets', [HomeController::class, 'getUserPets']);
-    Route::get('user/detail', [HomeController::class, 'getNormalUser']);
-
+// Get user's pets
+Route::get('user/pets', [HomeController::class, 'getUserPets']);
+Route::get('user/detail', [HomeController::class, 'getNormalUser']);
