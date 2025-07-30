@@ -12,7 +12,7 @@ class UpdatePetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'nullable|exists:users,id',
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:pet_categories,id',
             'subcategory_id' => 'required|exists:pet_subcategories,id',
