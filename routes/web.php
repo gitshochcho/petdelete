@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'login'])->name('home');
 
 Route::get('login', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
 Route::post('validate/login', [App\Http\Controllers\HomeController::class, 'validateLogin'])->name('loginCheck');
