@@ -5,6 +5,9 @@ namespace Modules\User\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Admin\Http\Requests\StorePetRequest;
+use Modules\Admin\Http\Requests\UpdatePetRequest;
 use Modules\Admin\Models\Pet;
 use Modules\Admin\Models\PetCategory;
 use Modules\Admin\Models\PetSubcategory;
@@ -18,8 +21,8 @@ class PetController extends Controller
 
     public function index()
     {
-
-        $pets = Pet::with(['user', 'petCategory', 'petSubcategory', 'petBreed'])->latest()->paginate(10);
+        $user = Auth::guard('web')->user();
+        $pets = Pet::with(['user', 'petCategory', 'petSubcategory', 'petBreed'])->where('user_id', $user->id)->latest()->paginate(10);
 
         return view('user::pets.index', compact('pets'));
     }
@@ -29,7 +32,8 @@ class PetController extends Controller
      */
     public function create()
     {
-        $users = User::where('status', 1)->get();
+        $user = Auth::guard('web')->user();
+        $users = User::where('status', 1)->where('id', $user->id)->get();
         $petCategories = PetCategory::where('status', true)->get();
         $petSubcategories = PetSubcategory::where('status', true)->get();
         $petBreeds = PetBreed::where('status', true)->get();
@@ -62,7 +66,8 @@ class PetController extends Controller
      */
     public function edit(Pet $pet)
     {
-        $users = User::where('status', 1)->get();
+        $user = Auth::guard('web')->user();
+        $users = User::where('status', 1)->where('id', $pet->user_id)->get();
         $petCategories = PetCategory::where('status', true)->get();
         $petSubcategories = PetSubcategory::where('status', true)->get();
         $petBreeds = PetBreed::where('status', true)->get();

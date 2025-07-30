@@ -39,6 +39,7 @@ Route::prefix('user')->group(function () {
         //     Route::get('cheak/status/{survey:uuid}', 'cheakStatus');
         });
 
+
     });
 
     // Route::get('user/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('user.dashboard');
