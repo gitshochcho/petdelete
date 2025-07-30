@@ -30,7 +30,7 @@
         <div class="card card-outline card-primary">
             <div class="card-header"> <a href="../index2.html"
                     class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
-                    <h1 class="mb-0"> <b>Admin</b>LTE
+                    <h1 class="mb-0"> <b>PET</b>BD
                     </h1>
                 </a> </div>
             <div class="card-body register-card-body">
@@ -41,8 +41,7 @@
                     @csrf
                     <div class="input-group mb-1">
                         <div class="form-floating"> <input id="registerFullName" type="text" class="form-control"
-                                name="name" placeholder=""> <label for="registerFullName">Full Name</label> </div>
-                        <div class="input-group-text"> <span class="bi bi-person"></span> </div>
+                                name="name" placeholder=""> <label for="registerFullName">Full Name</label>
 
                     </div>
                     @error('name')
@@ -50,9 +49,7 @@
                     @enderror
                     <div class="input-group mb-1">
                         <div class="form-floating"> <input id="registerEmail" type="email" class="form-control"
-                                name="email" placeholder=""> <label for="registerEmail">Email</label> </div>
-                        <div class="input-group-text"> <span class="bi bi-envelope"></span> </div>
-
+                                name="email" placeholder=""> <label for="registerEmail">Email</label>
 
                     </div>
 
@@ -61,8 +58,7 @@
                     @enderror
                     <div class="input-group mb-1">
                         <div class="form-floating"> <input id="phone" type="number" name="phone"
-                                class="form-control" placeholder=""> <label for="phone">Mobile</label> </div>
-                        <div class="input-group-text"> <span class="bi bi-telephone"></span> </div>
+                                class="form-control" placeholder=""> <label for="phone">Mobile</label>
 
 
                     </div>
@@ -76,7 +72,7 @@
                                 placeholder="">
                             <label for="registerPassword">Password</label>
                         </div>
-                        <div class="input-group-text"> <span class="bi bi-lock"></span></div>
+
 
                     </div>
 
@@ -89,7 +85,7 @@
                                 class="form-control" placeholder="">
                             <label for="registerPassword">Re-Password</label>
                         </div>
-                        <div class="input-group-text"> <span class="bi bi-lock"></span> </div>
+
                     </div>
 
 
@@ -97,7 +93,7 @@
                         <div class="form-floating"> <input id="bvc_reg_number" type="number" name="bvc_reg_number"
                                 class="form-control" placeholder=""> <label for="bvc_reg_number">BVC Registration
                                 Number</label> </div>
-                        <div class="input-group-text"> <span class="bi bi-telephone"></span> </div>
+
 
 
                     </div>
@@ -120,7 +116,7 @@
                             Please select a valid Gender.
                         </div>
 
-                        <div class="input-group-text"><span class="bi bi-gender-ambiguous"></span> </div>
+
 
 
                     </div>
@@ -135,8 +131,7 @@
                                     I agree to the <a href="#">terms</a> </label> </div>
                         </div> <!-- /.col -->
                         <div class="col-4">
-                            <div class="d-grid gap-2"> <button type="submit" class="btn btn-primary">Sign
-                                    In</button> </div>
+                            <div class="d-grid gap-2"> <button type="submit" class="btn btn-primary">SignIn</button> </div>
                         </div> <!-- /.col -->
                     </div> <!--end::Row-->
                 </form>
