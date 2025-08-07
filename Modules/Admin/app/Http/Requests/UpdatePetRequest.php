@@ -25,6 +25,8 @@ class UpdatePetRequest extends FormRequest
             'health_conditions' => 'nullable|string',
             'special_notes' => 'nullable|string',
             'status' => 'required|boolean',
+            'device_key' => 'nullable|string|max:255',
+            'device_token' => 'nullable|string',
         ];
     }
 
