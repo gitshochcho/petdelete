@@ -439,11 +439,10 @@ class HomeController extends Controller
     {
         try {
 
-
             $validator = Validator::make($request->all(), [
                 'doctor_id' => 'required|exists:admins,id',
-                'user_id' => 'required|exists:users,id',
-                'pet_id' => 'required|exists:pets,id',
+                // 'user_id' => 'required|exists:users,id',
+                // 'pet_id' => 'required|exists:pets,id',
                 'datetime' => 'required|date|after:now',
                 // 'type' => 'required|in:1,2',
                 'amount' => 'required|numeric|min:0',
@@ -457,7 +456,35 @@ class HomeController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
+            $user = Auth::user();
 
+            if ($user) {
+                // Authenticated user - use pet_id
+                $validator = Validator::make($request->all(), [
+                    'pet_id' => 'required|exists:pets,id'
+                ]);
+                
+                if ($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Pet ID is required for authenticated users',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+            } else {
+                // Non-authenticated user - use pet_name
+                $validator = Validator::make($request->all(), [
+                    'pet_name' => 'required|string|max:255'
+                ]);
+                
+                if ($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Pet name is required for non-authenticated users',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+            }
             // Check if pet belongs to user
             $pet = Pet::find($request->pet_id);
             if ($pet->user_id != $request->user_id) {
@@ -470,7 +497,8 @@ class HomeController extends Controller
             $appointment = Appointment::create([
                 'user_id' => $request->user_id,
                 'admin_id' => $request->doctor_id,
-                'pet_id' => $request->pet_id,
+                'pet_id' => $request->pet_id ?? null,
+                'pet_name' => $request->pet_name ?? null,
                 'datetime' => $request->datetime,
                 'type' => 1,
                 'amount' => $request->amount,
@@ -478,13 +506,12 @@ class HomeController extends Controller
                 'status' => 1 // Pending
             ]);
 
-
-
             return response()->json([
                 'success' => true,
                 'data' => $appointment,
                 'message' => 'Appointment created successfully'
             ], 201);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -607,5 +634,35 @@ class HomeController extends Controller
             'data' => $user,
             'message' => 'User found'
         ]);
+    }
+
+    /**
+     * Get doctors list
+    */
+
+    public function getDoctors (Request $request) {
+        try {
+            $doctors = Admin::role('doctor')
+                ->where('status', 1)
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->map(function ($doctor) {
+                    $doctor->profile = $doctor->getFirstMediaUrl('avatar') ?: null;
+                    return $doctor;
+                });
+
+            return response()->json([
+                'success' => true,
+                'data' => $doctors,
+                'message' => 'Doctors retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving doctors: ' . $e->getMessage()
+            ], 500);
+        }
+
+
     }
 }

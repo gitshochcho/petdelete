@@ -20,3 +20,5 @@ Route::get('doctors', [HomeController::class, 'getAvailableDoctors']);
 // Get user's pets
 Route::get('user/pets', [HomeController::class, 'getUserPets']);
 Route::get('user/detail', [HomeController::class, 'getNormalUser']);
+
+Route::get('get/doctors', [HomeController::class, 'getDoctors']);
