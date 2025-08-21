@@ -38,6 +38,7 @@
                                         <th>Weight</th>
                                         <th>Sex</th>
                                         <th>Status</th>
+                                        <th>Device</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -56,6 +57,17 @@
                                                 <span class="badge {{ $pet->status ? 'bg-success' : 'bg-danger' }}">
                                                     {{ $pet->status ? 'Active' : 'Disabled' }}
                                                 </span>
+                                            </td>
+                                            <td>
+                                                @if($pet->device_key || $pet->device_token)
+                                                    <span class="badge bg-primary">
+                                                        <i class="fas fa-mobile-alt"></i> Connected
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-secondary">
+                                                        <i class="fas fa-mobile-alt"></i> Not Set
+                                                    </span>
+                                                @endif
                                             </td>
                                             <td>
                                                 <a href="{{ route('admin.pets.show', $pet) }}" class="btn btn-sm btn-info">View</a>

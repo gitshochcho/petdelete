@@ -11,9 +11,9 @@ class UpdatePetCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        $petCategory = $this->route('petCategory');
+
         return [
-            'name' => 'required|string|max:255|unique:pet_categories,name,' . $petCategory->id,
+            'name' => 'required',
             'status' => 'required|boolean',
         ];
     }
