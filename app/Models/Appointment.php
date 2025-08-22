@@ -7,16 +7,19 @@ use Modules\Admin\Models\Pet;
 
 class Appointment extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'admin_id',
-        'pet_id',
-        'datetime',
-        'type', // 1=Chamber, 2=Home
-        'amount',
-        'status', // 0=Pending, 1=Approved
-        'notes',
-    ];
+    // protected $fillable = [
+    //     'user_id',
+    //     'admin_id',
+    //     'pet_id',
+    //     'datetime',
+    //     'type', // 1=Chamber, 2=Home
+    //     'amount',
+    //     'status', // 0=Pending, 1=Approved
+    //     'notes',
+    // ];
+
+    protected $guarded = [];
+
 
     public function user()
     {
