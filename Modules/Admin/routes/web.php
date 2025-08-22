@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:admin']], function () {
     Route::resource('pet-subcategories', PetSubcategoryController::class)->names('admin.pet-subcategories');
     Route::resource('pet-breeds', PetBreedController::class)->names('admin.pet-breeds');
     Route::resource('pets', PetController::class)->names('admin.pets');
+    Route::get('pets/{pet}/device', [PetController::class, 'device'])->name('admin.pets.device');
 
     // Service management routes
     Route::resource('services', ServiceController::class)->names('admin.services');

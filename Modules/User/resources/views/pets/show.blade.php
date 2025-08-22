@@ -127,6 +127,37 @@
                             @endif
                         </div>
                     </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-mobile-alt"></i> Device Information</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($pet->device_key || $pet->device_token)
+                                @if($pet->device_key)
+                                    <div class="mb-3">
+                                        <h6>Device Key</h6>
+                                        <p class="text-muted font-monospace">{{ $pet->device_key }}</p>
+                                    </div>
+                                @endif
+
+                                @if($pet->device_token)
+                                    <div class="mb-3">
+                                        <h6>Device Token</h6>
+                                        <div class="form-control bg-light" style="font-family: monospace; font-size: 12px; max-height: 100px; overflow-y: auto;">
+                                            {{ $pet->device_token }}
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
+                                <p class="text-muted">No device information available.</p>
+                                <small class="text-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Device information can be added when editing this pet.
+                                </small>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -38,28 +38,44 @@
                                         <th>Weight</th>
                                         <th>Sex</th>
                                         <th>Status</th>
+                                         <th>Device</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($pets as $pet)
                                         <tr>
-                                            <td>{{ $pet->id }}</td>
-                                            <td>{{ $pet->name }}</td>
-                                            <td>{{ $pet->user->name ?? 'N/A' }}</td>
-                                            <td>{{ $pet->petCategory->name ?? 'N/A' }}</td>
-                                            <td>{{ $pet->petBreed->name ?? 'N/A' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($pet->birthday)->age }} years</td>
-                                            <td>{{ $pet->weight }} kg</td>
-                                            <td>{{ ucfirst($pet->sex) }}</td>
+                                            <td>{{ $pet?->id }}</td>
+                                            <td>{{ $pet?->name }}</td>
+                                            <td>{{ $pet?->user?->name ?? 'N/A' }}</td>
+                                            <td>{{ $pet?->petCategory?->name ?? 'N/A' }}</td>
+                                            <td>{{ $pet?->petBreed?->name ?? 'N/A' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($pet?->birthday)?->age }} years</td>
+                                            <td>{{ $pet?->weight }} kg</td>
+                                            <td>{{ ucfirst($pet?->sex) }}</td>
                                             <td>
-                                                <span class="badge {{ $pet->status ? 'bg-success' : 'bg-danger' }}">
-                                                    {{ $pet->status ? 'Active' : 'Disabled' }}
+                                                <span class="badge {{ $pet?->status ? 'bg-success' : 'bg-danger' }}">
+                                                    {{ $pet?->status ? 'Active' : 'Disabled' }}
                                                 </span>
+                                            </td>
+
+                                            <td>
+                                                @if($pet?->device_key || $pet?->device_token)
+                                                    <span class="badge bg-primary">
+                                                        <i class="fas fa-mobile-alt"></i> Connected
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-secondary">
+                                                        <i class="fas fa-mobile-alt"></i> Not Set
+                                                    </span>
+                                                @endif
                                             </td>
                                             <td>
                                                 <a href="{{ route('user.pets.show', $pet) }}" class="btn btn-sm btn-info">View</a>
                                                 <a href="{{ route('user.pets.edit', $pet) }}" class="btn btn-sm btn-warning">Edit</a>
+                                                 @if($pet?->device_key || $pet?->device_token)
+                                                    <a href="{{ route('user.pets.device', $pet) }}" class="btn btn-sm btn-secondary">Device</a>
+                                                 @endif
                                                 <form action="{{ route('user.pets.destroy', $pet) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this pet?')">
                                                     @csrf
                                                     @method('DELETE')
