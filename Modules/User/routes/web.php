@@ -23,4 +23,6 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::resource('pets', PetController::class)->names('user.pets');
     Route::get('appointments', [UserController::class, 'userAppointments'])->name('user.appointments.index');
     Route::get('appointments/{appointment}', [UserController::class, 'showAppointment'])->name('user.appointments.show');
+
+    Route::get('pets/{pet}/device', [PetController::class, 'device'])->name('user.pets.device');
 });

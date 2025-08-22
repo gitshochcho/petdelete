@@ -18,12 +18,15 @@
 
 </head> <!--end::Head--> <!--begin::Body-->
 
-<body class="login-page bg-body-secondary">
+<body class="login-page bg-body-secondary" style="background-image: url('{{ asset('assets/img/background.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header"> <a href="../index2.html" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
-                    <h1 class="mb-0"> <b>PetBD</b> Login
-                    </h1>
+                    {{-- <h1 class="mb-0"> <b>PetBD</b> Login
+                    </h1> --}}
+                    <div class="text-center">
+                        <img src="{{ asset('assets/img/petbd.png') }}" alt="" style="width: 100px; height: auto;">
+                    </div>
                 </a> </div>
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
@@ -63,7 +66,7 @@
                  <!-- /.social-auth-links -->
                 <p class="mb-1"> <a href="{{ route('forgetMyPass') }}">I forgot my password</a> </p>
                 <p class="mb-0"> <a href="{{ route('registration') }}" class="text-center">
-                        Register a new membership
+                        Register a new pet owner
                     </a> </p>
             </div> <!-- /.login-card-body -->
         </div>

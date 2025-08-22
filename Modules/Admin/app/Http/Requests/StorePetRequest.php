@@ -25,6 +25,8 @@ class StorePetRequest extends FormRequest
             'health_conditions' => 'nullable|string',
             'special_notes' => 'nullable|string',
             'status' => 'required|boolean',
+            'device_key' => 'nullable|string',
+            'device_token' => 'nullable|string',
         ];
     }
 

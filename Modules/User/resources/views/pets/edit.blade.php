@@ -181,6 +181,42 @@
                             </div>
                         </div>
 
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5 class="text-primary mb-3"><i class="fas fa-mobile-alt"></i> Device Information</h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="device_key" class="form-label">Device Key</label>
+                                    <input type="text" name="device_key" id="device_key"
+                                           class="form-control @error('device_key') is-invalid @enderror"
+                                           value="{{ old('device_key', $pet->device_key) }}"
+                                           placeholder="Enter device key (optional)">
+                                    @error('device_key')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="form-text">Unique identifier for the pet's tracking device</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="device_token" class="form-label">Device Token</label>
+                                    <textarea name="device_token" id="device_token" rows="3"
+                                              class="form-control @error('device_token') is-invalid @enderror"
+                                              placeholder="Enter device token (optional)">{{ old('device_token', $pet->device_token) }}</textarea>
+                                    @error('device_token')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="form-text">Authentication token for device communication</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                             <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
