@@ -134,7 +134,7 @@
                                     I agree to the <a href="#">terms</a> </label> </div>
                         </div> <!-- /.col -->
                         <div class="col-4">
-                            <div class="d-grid gap-2"> <button type="submit" class="btn btn-primary">SignIn</button> </div>
+                            <div class="d-grid gap-2"> <button type="submit" class="btn btn-primary">Signup</button> </div>
                         </div> <!-- /.col -->
                     </div> <!--end::Row-->
                 </form>
