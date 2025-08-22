@@ -22,3 +22,4 @@ Route::get('user/pets', [HomeController::class, 'getUserPets']);
 Route::get('user/detail', [HomeController::class, 'getNormalUser']);
 
 Route::get('get/doctors', [HomeController::class, 'getDoctors']);
+Route::post('user/create-guest', [HomeController::class, 'storRegistrationAsGuest']);

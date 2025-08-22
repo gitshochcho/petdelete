@@ -3,9 +3,9 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>AdminLTE 4 | Register Page v2</title><!--begin::Primary Meta Tags-->
+    <title>Petbd | Vet Register</title><!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="AdminLTE 4 | Register Page v2">
+    <meta name="title" content="Petbd | Vet Register">
     <meta name="author" content="ColorlibHQ">
     <meta name="description"
         content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS.">
@@ -25,16 +25,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet">
 </head> <!--end::Head--> <!--begin::Body-->
 
-<body class="register-page bg-body-secondary">
+<body class="register-page bg-body-secondary" style="background-image: url('{{ asset('assets/img/background.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
     <div class="register-box"> <!-- /.register-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header"> <a href="../index2.html"
                     class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
-                    <h1 class="mb-0"> <b>PET</b>BD
-                    </h1>
+                    {{-- <h1 class="mb-0"> <b>PET</b>BD
+                    </h1> --}}
+                    <div class="text-center">
+                        <img src="{{ asset('assets/img/petbd.png') }}" alt="" style="width: 100px; height: auto;">
+                    </div>
                 </a> </div>
             <div class="card-body register-card-body">
-                <p class="register-box-msg">Register a new Doctor</p>
+                <p class="register-box-msg">Register a new Veterinarian</p>
 
 
                 <form action="{{ route('adminDocRegistration') }}" method="post">
@@ -141,7 +144,7 @@
                     </a>
                 </div> <!-- /.social-auth-links --> --}}
                 <p class="mb-0"> <a href="{{ route('login') }}" class="link-primary text-center">
-                        I already have a membership
+                        I already have an account
                     </a> </p>
             </div> <!-- /.register-card-body -->
         </div>

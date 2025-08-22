@@ -127,6 +127,66 @@ class HomeController extends Controller
         }
     }
 
+    
+    public function storRegistrationAsGuest(Request $request)
+    {
+        $code = rand(100000, 999999);
+        $countryID = $request->country_id ?? 18;
+        $countryIso = Country::where('id', $countryID)->first();
+
+        $validated = $request->validate(
+            [
+                'name' => 'required',
+                'email' => 'unique:users',
+                'password' => 'required|confirmed',
+                'password_confirmation' => 'required|same:password',
+                'phone' => ['required', 'unique:users', 'regex:/^[0-9+]+$/', (new Phone)->country([$countryIso->iso] ?? ['BD']),],
+                
+            ],
+            [
+                'phone.regex' => 'The phone number must contain only English digits (0-9).',
+                'phone.required' => 'The phone number is required',
+            ]
+        );
+
+        $phoneNumber = validationMobileNumber($request->phone, $countryIso->iso);
+
+        $user = DB::transaction(function () use ($request, $code, $phoneNumber) {
+            $userCreate = array(
+                "name" => $request->name,
+                "email" => $request->email ?? null,
+                "password" => Hash::make($request->password),
+                "phone" => $phoneNumber,
+                "otp" => $code,
+                "status" => 1,
+
+            );
+
+            $newuser = User::create($userCreate);
+
+            $userdetail = array(
+                "user_id" => $newuser->id,
+                "division_id" => $request->division_id ?? null,
+                "district_id" => $request->district_id ?? null,
+                "upazila_id" => $request->upazila_id ?? null,
+                "union_id" => $request->union_id ?? null,
+                "education_type_id" => $request->education_type_id ?? null,
+                "profession_id" => $request->profession_id ?? null,
+                "gender_id" => $request->gender_id ?? 1,
+                "country_id" => $request->country_id ?? null,
+                "religion_id" => $request->religion_id ?? null,
+            );
+            $userDetail = UserDetail::create($userdetail);
+
+            return $newuser;
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $user,
+            'message' => 'User created successfully as guest'
+        ], 201);
+    }
 
 
 
@@ -149,7 +209,7 @@ class HomeController extends Controller
                 // 'upazila_id' => 'required',
                 // 'district_id' => 'required',
                 // 'division_id' => 'required',
-                'gender_id' => 'required',
+                // 'gender_id' => 'required',
                 // 'country_id' => 'required',
             ],
             [
@@ -182,7 +242,7 @@ class HomeController extends Controller
                 "union_id" => $request->union_id ?? null,
                 "education_type_id" => $request->education_type_id ?? null,
                 "profession_id" => $request->profession_id ?? null,
-                "gender_id" => $request->gender_id ?? null,
+                "gender_id" => $request->gender_id ?? 1,
                 "country_id" => $request->country_id ?? null,
                 "religion_id" => $request->religion_id ?? null,
             );
@@ -441,10 +501,7 @@ class HomeController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'doctor_id' => 'required|exists:admins,id',
-                // 'user_id' => 'required|exists:users,id',
-                // 'pet_id' => 'required|exists:pets,id',
                 'datetime' => 'required|date|after:now',
-                // 'type' => 'required|in:1,2',
                 'amount' => 'required|numeric|min:0',
                 'notes' => 'nullable|string|max:1000'
             ]);
@@ -456,51 +513,62 @@ class HomeController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-            $user = Auth::user();
+            
+            $user = $request->user_id;
 
             if ($user) {
                 // Authenticated user - use pet_id
-                $validator = Validator::make($request->all(), [
-                    'pet_id' => 'required|exists:pets,id'
-                ]);
+                // $validator = Validator::make($request->all(), [
+                //     'pet_id' => 'required|exists:pets,id'
+                // ]);
                 
-                if ($validator->fails()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Pet ID is required for authenticated users',
-                        'errors' => $validator->errors()
-                    ], 422);
+                // if ($validator->fails()) {
+                //     return response()->json([
+                //         'success' => false,
+                //         'message' => 'Pet ID is required for authenticated users',
+                //         'errors' => $validator->errors()
+                //     ], 422);
+                // }
+
+                // Check if pet belongs to user (only if pet_id is provided)
+                if ($request->pet_id) {
+                    $pet = Pet::find($request->pet_id);
+                    if (!$pet || $pet->user_id != $user->id) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Pet does not belong to this user'
+                        ], 403);
+                    }
                 }
             } else {
-                // Non-authenticated user - use pet_name
+                // Non-authenticated user - use pet_name and other details
                 $validator = Validator::make($request->all(), [
-                    'pet_name' => 'required|string|max:255'
+                    'pet_name' => 'required|string|max:255',
+                    'owner_name' => 'required|string|max:255',
+                    'phone_number' => 'required|string|max:20',
+                    'email' => 'nullable|email'
                 ]);
                 
                 if ($validator->fails()) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Pet name is required for non-authenticated users',
+                        'message' => 'Required fields missing for non-authenticated users',
                         'errors' => $validator->errors()
                     ], 422);
                 }
-            }
-            // Check if pet belongs to user
-            $pet = Pet::find($request->pet_id);
-            if ($pet->user_id != $request->user_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Pet does not belong to this user'
-                ], 403);
             }
 
             $appointment = Appointment::create([
-                'user_id' => $request->user_id,
+                'user_id' => $user ?? null,
+                'owner_name' => $request->owner_name ?? null,
+                'phone_number' => $request->phone_number ?? null,
+                'email' => $request->email ?? null,
                 'admin_id' => $request->doctor_id,
                 'pet_id' => $request->pet_id ?? null,
                 'pet_name' => $request->pet_name ?? null,
                 'datetime' => $request->datetime,
-                'type' => 1,
+                'type' => $request->type ?? 1, // Default to Chamber if not provided
+                'home_address' => $request->home_address ?? null,
                 'amount' => $request->amount,
                 'notes' => $request->notes,
                 'status' => 1 // Pending
