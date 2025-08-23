@@ -3,9 +3,9 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>AdminLTE 4 | Login Page v2</title><!--begin::Primary Meta Tags-->
+    <title>Petbd | Confirm Password</title><!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="AdminLTE 4 | Login Page v2">
+    <meta name="title" content="Petbd | Confirm Password">
     <meta name="author" content="ColorlibHQ">
     <meta name="description" content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS.">
     <meta name="keywords" content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard"><!--end::Primary Meta Tags--><!--begin::Fonts-->
@@ -16,12 +16,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet">
 </head> <!--end::Head--> <!--begin::Body-->
 
-<body class="login-page bg-body-secondary">
+<body class="login-page bg-body-secondary" style="background-image: url('{{ asset('assets/img/background.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header"> <a href="../index2.html" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
-                    <h1 class="mb-0"> <b>Admin</b>LTE
-                    </h1>
+                    {{-- <h1 class="mb-0"> <b>Admin</b>LTE
+                    </h1> --}}
+                    <div class="text-center">
+                        <img src="{{asset('assets/img/petbd.png')}}" alt="" style="width: 100px; height: auto;">
+                    </div>
                 </a> </div>
             <div class="card-body login-card-body">
                 <form action="{{route('updatePassword')}}" method="post">
