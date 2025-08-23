@@ -114,8 +114,8 @@ class PetController extends Controller
                 $initialLng = 90.41471815033081;
             }
             if ($pet->device_key == "track-university") {
-                $initialLat = 23.771741087733616; // Around San Francisco
-                $initialLng = 90.37506519582011;
+                $initialLat = 23.772124987095808; // Around San Francisco
+                $initialLng = 90.37831916520963;
             }
 
 
