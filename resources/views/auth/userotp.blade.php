@@ -20,9 +20,6 @@
 <body class="login-page bg-body-secondary" style="background-image: url('{{ asset('assets/img/background.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
     <div class="login-box">
 
-
-
-
         <div class="height-100 d-flex justify-content-center align-items-center">
             <div class="position-relative">
                 <p class="login-box-msg">Type Email or Mobile</p>

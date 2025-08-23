@@ -21,7 +21,8 @@
 <body class="login-page bg-body-secondary" style="background-image: url('{{ asset('assets/img/background.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
     <div class="login-box">
         <div class="card card-outline card-primary">
-            <div class="card-header"> <a href="../index2.html" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
+            <div class="card-header"> 
+                <a href="{{ route('login') }}" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
                     {{-- <h1 class="mb-0"> <b>PetBD</b> Login
                     </h1> --}}
                     <div class="text-center">
