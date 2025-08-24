@@ -75,4 +75,13 @@ class DoctorController extends Controller
         // return redirect()->route('admin.services.index')
         //     ->with('success', 'Service deleted successfully.');
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $doctor = Admin::findOrFail($id);
+        $doctor->status = $request->input('status');
+        $doctor->save();
+
+        return response()->json(['success' => true]);
+    }
 }
