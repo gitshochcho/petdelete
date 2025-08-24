@@ -46,4 +46,5 @@ Route::group(['middleware' => ['auth:admin']], function () {
     Route::get('appointments/{id}/details', [AdminController::class, 'getAppointmentDetails'])->name('admin.appointments.details');
 
     Route::get('doctors', [DoctorController::class, 'index'])->name('admin.doctors.index');
+    Route::post('doctors/{id}/update-status', [DoctorController::class, 'updateStatus'])->name('admin.doctors.update-status');
 });
